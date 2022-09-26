@@ -39,6 +39,15 @@ export const pageQuery = graphql`
             height: 212
           )
         }
+        nestedContentReference {
+          nestedContent {
+            raw
+          }
+          nestedContentTitle
+          blog_post {
+            id
+          }
+        }
         description {
           raw
         }

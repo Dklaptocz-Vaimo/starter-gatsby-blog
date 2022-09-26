@@ -23,7 +23,6 @@ class BlogPostTemplate extends React.Component {
     )
     const plainTextBody = documentToPlainTextString(JSON.parse(post.body.raw))
     const { minutes: timeToRead } = readingTime(plainTextBody)
-    
     const options = {
       renderNode: {
         [BLOCKS.EMBEDDED_ASSET]: (node) => {
@@ -59,6 +58,11 @@ class BlogPostTemplate extends React.Component {
           <div className={styles.article}>
             <div className={styles.body}>
               {post.body?.raw && renderRichText(post.body, options)}
+            </div>
+            <div className={styles.body}>
+              <div>Nested content goes here!</div>
+              <div>Modify a nested Content data in contentful to change this block on every page.</div>
+              {post.nestedContentReference.nestedContent?.raw && renderRichText(post.nestedContentReference.nestedContent, options)}
             </div>
             <Tags tags={post.tags} />
             {(previous || next) && (
@@ -117,6 +121,19 @@ export const pageQuery = graphql`
       tags
       description {
         raw
+      }
+      nestedContentReference {
+        nestedContent {
+          raw
+        }
+        nestedContentTitle
+        blog_post {
+          id
+        }
+        nestedContentMedia {
+          gatsbyImage(width: 300, placeholder: BLURRED)
+          contentful_id
+        }
       }
     }
     previous: contentfulBlogPost(slug: { eq: $previousPostSlug }) {
